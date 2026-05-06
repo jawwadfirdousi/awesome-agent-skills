@@ -1,0 +1,26 @@
+{
+  "name": "awesome-agent-skills",
+  "owner": {
+    "name": "jawwadfirdousi"
+  },
+  "metadata": {
+    "description": "A growing collection of portable agent skills.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "repo-snapshot",
+      "source": "./repo-snapshot",
+      "description": "Summarizes the current git repository: branch, status, recent commits, and file mix.",
+      "category": "git",
+      "tags": ["git", "overview", "context"]
+    },
+    {
+      "name": "commit-message",
+      "source": "./commit-message",
+      "description": "Drafts a Conventional Commits message from the currently staged changes.",
+      "category": "git",
+      "tags": ["git", "commit", "conventional-commits"]
+    }
+  ]
+}

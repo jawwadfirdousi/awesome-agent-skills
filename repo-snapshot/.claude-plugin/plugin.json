@@ -1,0 +1,12 @@
+{
+  "name": "repo-snapshot",
+  "description": "Summarizes the current git repository: branch, status, recent commits, and file mix.",
+  "version": "0.1.0",
+  "author": {
+    "name": "jawwadfirdousi"
+  },
+  "homepage": "https://github.com/jawwadfirdousi/awesome-agent-skills",
+  "repository": "https://github.com/jawwadfirdousi/awesome-agent-skills",
+  "license": "MIT",
+  "keywords": ["git", "overview", "context"]
+}
