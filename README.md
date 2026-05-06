@@ -36,7 +36,7 @@ Install just one if that's all you want. After installing, run `/plugin marketpl
 ### Install via git URL
 
 ```text
-/plugin marketplace add https://github.com/<your-user>/awesome-agent-skills.git
+/plugin marketplace add https://github.com/jawwadfirdousi/awesome-agent-skills.git
 ```
 
 ### Try without installing
