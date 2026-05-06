@@ -21,6 +21,13 @@
       "description": "Drafts a Conventional Commits message from the currently staged changes.",
       "category": "git",
       "tags": ["git", "commit", "conventional-commits"]
+    },
+    {
+      "name": "svg-creator",
+      "source": "./svg-creator",
+      "description": "Create, edit, validate, and package high-quality SVGs: icons, logos, illustrations, diagrams, charts, patterns, and inline SVG code.",
+      "category": "design",
+      "tags": ["svg", "icons", "illustrations", "graphics", "design"]
     }
   ]
 }

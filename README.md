@@ -8,6 +8,7 @@ Portable agent skills for Claude Code, OpenAI Codex, and Claude.ai. Built on the
 | --- | --- |
 | [`repo-snapshot`](repo-snapshot) | Summarizes the current git repo: branch, status, recent commits, file mix |
 | [`commit-message`](commit-message) | Drafts a Conventional Commits message from staged changes |
+| [`svg-creator`](svg-creator/skills/svg-creator) | Creates, edits, and validates SVGs: icons, logos, illustrations, diagrams |
 
 Click a skill name for usage details and examples.
 
@@ -19,6 +20,7 @@ Click a skill name for usage details and examples.
 /plugin marketplace add jawwadfirdousi/awesome-agent-skills
 /plugin install repo-snapshot@awesome-agent-skills
 /plugin install commit-message@awesome-agent-skills
+/plugin install svg-creator@awesome-agent-skills
 ```
 
 ### Codex
@@ -26,6 +28,7 @@ Click a skill name for usage details and examples.
 ```text
 $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/repo-snapshot/skills/repo-snapshot
 $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/commit-message/skills/commit-message
+$skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/svg-creator/skills/svg-creator
 ```
 
 Restart Codex after install.
@@ -39,7 +42,7 @@ git clone https://github.com/jawwadfirdousi/awesome-agent-skills.git
 cd awesome-agent-skills/repo-snapshot/skills && zip -r repo-snapshot.zip repo-snapshot
 ```
 
-Upload at [claude.ai/customize/skills](https://claude.ai/customize/skills) (`+` → `+ Create skill` → `Upload a skill`). Repeat for `commit-message/skills/commit-message`.
+Upload at [claude.ai/customize/skills](https://claude.ai/customize/skills) (`+` → `+ Create skill` → `Upload a skill`). Repeat with `commit-message/skills/commit-message` and `svg-creator/skills/svg-creator`.
 
 ## Uninstall
 
@@ -48,6 +51,7 @@ Upload at [claude.ai/customize/skills](https://claude.ai/customize/skills) (`+` 
 ```text
 /plugin uninstall repo-snapshot@awesome-agent-skills
 /plugin uninstall commit-message@awesome-agent-skills
+/plugin uninstall svg-creator@awesome-agent-skills
 /plugin marketplace remove awesome-agent-skills        # removes ALL skills from this marketplace
 ```
 
@@ -58,6 +62,7 @@ Run `/reload-plugins` to apply. Use `/plugin disable …` instead to keep the sk
 ```bash
 rm -rf ~/.codex/skills/repo-snapshot
 rm -rf ~/.codex/skills/commit-message
+rm -rf ~/.codex/skills/svg-creator
 ```
 
 Restart Codex. To disable without deleting, add to `~/.codex/config.toml`:
