@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "A growing collection of portable agent skills.",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "plugins": [
     {
@@ -13,21 +13,35 @@
       "source": "./repo-snapshot",
       "description": "Summarizes the current git repository: branch, status, recent commits, and file mix.",
       "category": "git",
-      "tags": ["git", "overview", "context"]
+      "tags": [
+        "git",
+        "overview",
+        "context"
+      ]
     },
     {
       "name": "commit-message",
       "source": "./commit-message",
       "description": "Drafts a Conventional Commits message from the currently staged changes.",
       "category": "git",
-      "tags": ["git", "commit", "conventional-commits"]
+      "tags": [
+        "git",
+        "commit",
+        "conventional-commits"
+      ]
     },
     {
       "name": "svg-creator",
       "source": "./svg-creator",
       "description": "Create, edit, validate, and package high-quality SVGs: icons, logos, illustrations, diagrams, charts, patterns, and inline SVG code.",
       "category": "design",
-      "tags": ["svg", "icons", "illustrations", "graphics", "design"]
+      "tags": [
+        "svg",
+        "icons",
+        "illustrations",
+        "graphics",
+        "design"
+      ]
     }
   ]
 }
