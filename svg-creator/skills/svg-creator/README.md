@@ -47,17 +47,6 @@ Color: single-color.
 Shape: consistent line weight, balanced spacing, crisp geometry.
 ```
 
-**Dolphin icon (static, organic)**
-
-```
-Create a beautiful blue dolphin icon.
-
-Style: modern, smooth, minimal, friendly, and polished.
-Composition: dolphin in a graceful jumping pose, centered, strong silhouette, readable at small sizes.
-Color: ocean blue with optional aqua highlight.
-Shape: smooth curves, simple fins, elegant tail, no tiny details.
-```
-
 **Spinning loader (animated, UI)**
 
 ```
