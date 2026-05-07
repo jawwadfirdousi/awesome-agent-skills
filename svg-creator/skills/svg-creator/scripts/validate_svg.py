@@ -568,6 +568,12 @@ def validate_svg(path: Path, strict: bool = False) -> Report:
         elif tag not in ALLOWED_TAGS:
             report.warn(f"{location}: uncommon SVG element <{tag}>; verify target support")
 
+        # CSS independence: <style> renders only in CSS-aware viewers.
+        if tag == "style":
+            report.warn(
+                f"{location}: <style> element is CSS-dependent; many non-browser renderers ignore it. Prefer presentation attributes."
+            )
+
         if tag in GRAPHIC_TAGS and tag not in {"svg", "g", "a", "symbol"}:
             visible_elements += 1
 
@@ -610,6 +616,26 @@ def validate_svg(path: Path, strict: bool = False) -> Report:
             if name == "style":
                 for issue in scan_css_for_danger(value):
                     report.error(f"{location}: {issue}")
+                # CSS independence: style="..." is CSS, not SVG presentation.
+                report.warn(
+                    f"{location}: style=\"...\" attribute is CSS-dependent; prefer presentation attributes (fill, stroke, etc.)"
+                )
+
+            # CSS independence: class is a CSS hook with no effect outside a CSS engine.
+            if name == "class":
+                report.warn(
+                    f"{location}: class=\"...\" attribute is a CSS hook; useless in renderers without a CSS engine"
+                )
+
+            # CSS independence: currentColor and var() resolve only in CSS contexts.
+            if "currentcolor" in lower_value:
+                report.warn(
+                    f"{location}: '{name}' uses currentColor, which depends on CSS color cascade and falls back to black in non-CSS renderers"
+                )
+            if value.strip().lower().startswith("var(") or " var(" in lower_value:
+                report.warn(
+                    f"{location}: '{name}' uses CSS var(); not portable to non-CSS renderers"
+                )
 
             if name in {"aria-labelledby", "aria-describedby"}:
                 for ref_id in value.split():
@@ -632,6 +658,12 @@ def validate_svg(path: Path, strict: bool = False) -> Report:
         if tag == "style" and elem.text:
             for issue in scan_css_for_danger(elem.text):
                 report.error(f"{location}: {issue}")
+            # CSS independence: detect CSS animations.
+            text_lower = elem.text.lower()
+            if "@keyframes" in text_lower or " animation:" in text_lower or "animation-name" in text_lower:
+                report.warn(
+                    f"{location}: <style> contains CSS animations; use SMIL (<animate>, <animateTransform>, <animateMotion>) instead for renderer-independent animation"
+                )
 
         if tag in ANIMATION_TAGS:
             target_attr = normalized_attrs.get("attributeName", "")

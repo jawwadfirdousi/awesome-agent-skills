@@ -4,7 +4,7 @@ Reference for detailed SVG creation. Use when the user asks for a beautiful, pol
 
 ## Quality target
 
-A finished SVG should satisfy six checks:
+A finished SVG should satisfy seven checks:
 
 1. It communicates the requested subject instantly.
 2. It has a clear visual hierarchy: primary form, supporting details, restrained accents.
@@ -12,6 +12,22 @@ A finished SVG should satisfy six checks:
 4. It is accessible or intentionally decorative.
 5. It is safe and self-contained for browser rendering.
 6. It is small and editable. No bloat, no unused defs, no leftover editor metadata.
+7. **It is CSS-independent.** Renders identically in any compliant SVG renderer.
+
+## CSS independence
+
+Default to pure SVG. Style with presentation attributes (`fill`, `stroke`, `opacity`, `stroke-width`, `stroke-linecap`, etc.), not with CSS.
+
+- No `<style>` element.
+- No `style="..."` attribute.
+- No `currentColor`, no CSS variables (`var(...)`).
+- No CSS animations (`@keyframes`, `animation:`). Use SMIL (`<animate>`, `<animateTransform>`, `<animateMotion>`, `<set>`).
+- No `:hover` / `:focus` / media queries.
+- No `@import` or external fonts.
+
+The benefit: the same SVG renders correctly in browsers, Inkscape, librsvg, CairoSVG, native iOS/Android SVG support, COLR/SVG fonts, design tools, and server-side rasterizers. Adding CSS reduces the supported renderer set to "browsers and a few CSS-aware tools".
+
+Use CSS only when the user opts in for a web-only output ("for an HTML icon system", "themeable via Tailwind").
 
 ## Canvas and geometry defaults
 
@@ -43,15 +59,15 @@ Keep all important geometry inside the viewBox. If a stroke reaches an edge, ins
 
 ## Color strategy
 
-Use a compact palette unless the user provides brand colors.
+Use a compact palette unless the user provides brand colors. **Always use explicit colors** as presentation attributes (`fill="#3b82f6"`, `stroke="#0f172a"`). Avoid `currentColor` and CSS variables in CSS-independent SVG — they resolve only inside a CSS engine.
 
-- Monochrome icons: `stroke="currentColor"` or `fill="currentColor"`. The consumer themes via the parent element's CSS `color`. Same trick works through `<use>` shadow DOM.
-- UI accent icon: one neutral plus one accent.
-- Rich illustration: one background, one main hue, one secondary hue, one highlight, one shadow.
+- Monochrome icons: pick a single explicit color (e.g. `stroke="#0f172a"`).
+- UI accent icon: one neutral plus one accent, both explicit.
+- Rich illustration: one background, one main hue, one secondary hue, one highlight, one shadow — all as explicit hex values.
 - Gradients reinforce form or lighting; avoid many unrelated gradients.
 - Verify contrast for thin strokes, foreground objects, and any text.
 
-Define reusable colors via CSS custom properties (`var(--accent)`) only when the consumer supports inline style customization. For portable standalone SVGs, direct `fill` and `stroke` attributes are safer.
+`currentColor` is acceptable **only** when the user explicitly asks for an icon themeable via CSS `color` and accepts that the SVG won't render correctly outside a CSS engine. CSS variables (`var(...)`) and `<style>` blocks fall under the same opt-in rule.
 
 ## Strokes and joins
 

@@ -2,6 +2,8 @@
 
 Use these as starting points. Replace IDs, titles, descriptions, dimensions, colors, and geometry for the actual request.
 
+**All templates are CSS-independent**: presentation attributes only, no `<style>` blocks, no `style=""` attributes, no `currentColor`, no CSS animations. They render identically in browsers, Inkscape, librsvg, CairoSVG, native iOS/Android renderers, and any other compliant SVG implementation.
+
 ## Meaningful standalone SVG
 
 For illustrations, diagrams, logos with semantic meaning, charts, and any SVG that should be understood by assistive technology.
@@ -22,12 +24,12 @@ For illustrations, diagrams, logos with semantic meaning, charts, and any SVG th
 
 ## Decorative UI icon
 
-For icons next to visible text, button icons with external labels, and purely decorative UI marks.
+For icons next to visible text, button icons with external labels, and purely decorative UI marks. Pick an explicit color so the icon renders identically anywhere.
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-  <path d="M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-  <path d="M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M5 12h14" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M12 5l7 7-7 7" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 ```
 
@@ -39,46 +41,15 @@ When the icon itself carries meaning and there is no surrounding visible label.
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-labelledby="download-title download-desc">
   <title id="download-title">Download</title>
   <desc id="download-desc">Arrow pointing down into a tray.</desc>
-  <path d="M12 3v11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-  <path d="M7 9l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M5 19h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M12 3v11" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M7 9l5 5 5-5" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M5 19h14" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
 </svg>
 ```
 
-## Graphics-symbol icon (for use in a sprite)
+## Polished illustration with shadow
 
-For atomic glyphs referenced by `<use>` from a sprite. The role identifies it as a meaningful symbol whose children are presentational (pruned from the AT tree).
-
-```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="graphics-symbol" aria-label="Search">
-  <circle cx="11" cy="11" r="6" fill="none" stroke="currentColor" stroke-width="2"/>
-  <path d="M16 16l4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-</svg>
-```
-
-## Sprite + use pattern
-
-A sprite SVG and a referencing `<use>` site. `currentColor` and CSS variables pass through the `<use>` shadow DOM, which is the supported way to theme sprite icons from the host page.
-
-```svg
-<!-- sprite.svg -->
-<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-  <symbol id="heart" viewBox="0 0 24 24">
-    <path d="M12 21s-7-4.35-7-10a4 4 0 017-2.65A4 4 0 0119 11c0 5.65-7 10-7 10z"
-          fill="currentColor"/>
-  </symbol>
-</svg>
-
-<!-- in the host page -->
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="color:#e11d48"
-     role="img" aria-label="Favorite">
-  <use href="sprite.svg#heart"/>
-</svg>
-```
-
-## Polished app-style illustration
-
-Rich, self-contained vector artwork. Note the explicit filter region (`-25% / 150%`) so the drop shadow isn't clipped.
+Self-contained vector artwork. The filter region is expanded (`-25%` / `150%`) so the drop shadow isn't clipped.
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="card-title card-desc">
@@ -109,7 +80,7 @@ Rich, self-contained vector artwork. Note the explicit filter region (`-25% / 15
 
 ## Diagram with marker arrows
 
-Process flows and system diagrams. Note `role="graphics-document"` because the layout itself conveys meaning.
+Process flows and system diagrams. `role="graphics-document"` because the layout itself conveys meaning.
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320" role="graphics-document" aria-labelledby="flow-title flow-desc">
@@ -117,7 +88,7 @@ Process flows and system diagrams. Note `role="graphics-document"` because the l
   <desc id="flow-desc">Input flows to processing, then to output.</desc>
   <defs>
     <marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 Z" fill="context-stroke"/>
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#334155"/>
     </marker>
   </defs>
   <g fill="#f8fafc" stroke="#334155" stroke-width="2">
@@ -129,7 +100,7 @@ Process flows and system diagrams. Note `role="graphics-document"` because the l
     <path d="M 232 152 H 300"/>
     <path d="M 484 152 H 552"/>
   </g>
-  <g font-family="system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle" fill="#0f172a">
+  <g font-family="serif" font-size="22" font-weight="600" text-anchor="middle" fill="#0f172a">
     <text x="148" y="160">Input</text>
     <text x="400" y="160">Process</text>
     <text x="652" y="160">Output</text>
@@ -137,9 +108,9 @@ Process flows and system diagrams. Note `role="graphics-document"` because the l
 </svg>
 ```
 
-## Subtle SMIL animation
+## SMIL animation: pulsing ring
 
-For animation that loops indefinitely. Always pair with a static fallback story when the consumer might prefer reduced motion.
+`<animate>` on `r` and `opacity` attributes. Loops indefinitely. No CSS.
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="pulse-title pulse-desc">
@@ -153,42 +124,39 @@ For animation that loops indefinitely. Always pair with a static fallback story 
 </svg>
 ```
 
-## CSS animation with prefers-reduced-motion guard
+## SMIL animation: rotating loader
 
-Preferred over SMIL for accessibility: CSS animations are paused automatically by browsers under `prefers-reduced-motion: reduce`. Add the explicit guard to short-circuit the animation entirely on those clients.
+Rotation requires `<animateTransform>` with `type="rotate"`. The three values for rotate are `angle cx cy`.
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" role="img" aria-label="Loading">
-  <style>
-    .spinner { transform-origin: 30px 30px; animation: spin 1s linear infinite; }
-    @media (prefers-reduced-motion: reduce) {
-      .spinner { animation: none; }
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
   <circle cx="30" cy="30" r="22" fill="none" stroke="#e2e8f0" stroke-width="6"/>
-  <path class="spinner" d="M30 8 A22 22 0 0 1 52 30" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+  <path d="M30 8 A22 22 0 0 1 52 30" fill="none" stroke="#3b82f6" stroke-width="6" stroke-linecap="round">
+    <animateTransform attributeName="transform" type="rotate"
+                      from="0 30 30" to="360 30 30" dur="1s" repeatCount="indefinite"/>
+  </path>
 </svg>
 ```
 
-## animateTransform: rotation
+## SMIL animation: heartbeat scale pulse
 
-Rotation is an `<animateTransform>`, not `<animate>`. The `type` attribute is required.
+Scale via `<animateTransform>` with `type="scale"`. Wrap the heart in a `<g>` with `transform-origin`-equivalent translation so the scale anchors correctly.
 
 ```svg
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true">
-  <g transform="translate(50 50)">
-    <rect x="-30" y="-30" width="60" height="60" rx="8" fill="#6366f1">
-      <animateTransform attributeName="transform" type="rotate"
-                        from="0" to="360" dur="3s" repeatCount="indefinite"/>
-    </rect>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Heartbeat">
+  <g transform="translate(32 32)">
+    <path d="M0 18 C -22 4, -22 -16, -10 -16 C -3 -16, 0 -10, 0 -6 C 0 -10, 3 -16, 10 -16 C 22 -16, 22 4, 0 18 Z"
+          fill="#ef4444">
+      <animateTransform attributeName="transform" type="scale"
+                        values="1;1.12;1" dur="1.2s" repeatCount="indefinite"/>
+    </path>
   </g>
 </svg>
 ```
 
-## animateMotion along a path
+## SMIL animation: motion along a path
 
-The only declarative way to follow an arbitrary path. CSS `offset-path` is similar but support varies.
+The only declarative way to follow an arbitrary path. `<mpath>` references a `<path>` defined elsewhere; `rotate="auto"` aligns the moving element to the path tangent.
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" aria-hidden="true">
@@ -201,4 +169,51 @@ The only declarative way to follow an arbitrary path. CSS `offset-path` is simil
 </svg>
 ```
 
-When animation is not essential, prefer a static equivalent.
+## SMIL animation: chained sequence
+
+Animations chain via `begin="<id>.end"`. Each animation also names itself with `id` so the next can reference it.
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" aria-hidden="true">
+  <circle cx="20" cy="50" r="10" fill="#3b82f6">
+    <animate id="step1" attributeName="cx" from="20" to="100" dur="1s" fill="freeze"/>
+    <animate id="step2" attributeName="cx" from="100" to="180" dur="1s" begin="step1.end" fill="freeze"/>
+    <animate attributeName="fill" from="#3b82f6" to="#22c55e" dur="0.5s" begin="step2.end" fill="freeze"/>
+  </circle>
+</svg>
+```
+
+## SMIL animation: discrete frame switching
+
+`<set>` flips an attribute at a specific time without interpolation. Useful for state changes inside a longer animation.
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60" aria-hidden="true">
+  <circle cx="30" cy="30" r="20" fill="#cbd5e1">
+    <set attributeName="fill" to="#22c55e" begin="1s"/>
+    <set attributeName="fill" to="#cbd5e1" begin="2s"/>
+  </circle>
+</svg>
+```
+
+## Web-only opt-in: `<use>` + `currentColor`
+
+Only when the user explicitly asks for an HTML/CSS-themeable icon system. `currentColor` resolves through the CSS cascade, so this is **not** portable to non-CSS renderers. Document the CSS dependency clearly.
+
+```svg
+<!-- sprite.svg (CSS-dependent) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="heart" viewBox="0 0 24 24">
+    <path d="M12 21s-7-4.35-7-10a4 4 0 017-2.65A4 4 0 0119 11c0 5.65-7 10-7 10z"
+          fill="currentColor"/>
+  </symbol>
+</svg>
+
+<!-- in the host page -->
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="color:#e11d48"
+     role="img" aria-label="Favorite">
+  <use href="sprite.svg#heart"/>
+</svg>
+```
+
+If portability matters more than CSS theming, replace `currentColor` with the explicit hex color and serve a separate sprite per color, or generate variants at build time.

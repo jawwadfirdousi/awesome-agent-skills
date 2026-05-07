@@ -7,9 +7,23 @@ license: MIT
 
 # SVG Creator
 
-Produce SVGs that are spec-correct (W3C SVG 2), accessible when meaningful, safe to render in untrusted contexts, optimized in size, and readable enough to edit.
+Produce SVGs that are spec-correct (W3C SVG 2), **CSS-independent**, accessible when meaningful, safe to render in untrusted contexts, optimized in size, and readable enough to edit.
 
 ## Core rules
+
+### CSS independence (default)
+
+The SVG must render identically in any compliant renderer — Chrome, Inkscape, librsvg, CairoSVG, native iOS/Android SVG support, COLR/SVG fonts, design tools, server-side rasterizers — without depending on a CSS engine, an HTML host, or external stylesheets. This means:
+
+- **No `<style>` element.** Use presentation attributes (`fill="..."`, `stroke="..."`, `opacity="..."`) instead of CSS rules.
+- **No `style="..."` attribute** on elements. Same reason.
+- **No `currentColor`** unless the user explicitly asks for an icon themeable via CSS `color`. `currentColor` resolves through the CSS cascade; renderers without CSS fall back to black.
+- **No CSS variables** (`var(--name)`).
+- **No CSS animations** (`@keyframes`, `animation:` shorthand). For motion, use SMIL elements: `<animate>`, `<animateTransform>`, `<animateMotion>`, `<set>`.
+- **No `:hover` / `:focus` rules.** Interactivity that requires CSS belongs in the host page, not in the SVG.
+- **No external resources.** No `@import`, no external fonts, no remote `<image>` hrefs.
+
+When the user explicitly opts in to web-only output ("for an HTML icon system", "themeable via parent color", "use Tailwind classes"), `currentColor` and a minimal `<style>` block are acceptable. Otherwise default to pure SVG.
 
 ### Root element
 
@@ -40,7 +54,7 @@ Keep all rendered geometry inside the viewBox. Strokes that touch an edge will b
 ### Color and paint
 
 - `fill` defaults to **black**, `stroke` defaults to **none**. A bare `<path d="..."/>` renders solid black. For a stroke-only icon, set `fill="none"` and a stroke explicitly.
-- Use `fill="currentColor"` (or stroke) on monochrome UI icons so the consumer can theme via the parent's CSS `color`. This is also the canonical way to style sprites referenced via `<use href="sprite.svg#id">`.
+- Set explicit colors as presentation attributes: `fill="#3b82f6"`, `stroke="#0f172a"`. Avoid `currentColor` by default; reach for it only when the user explicitly asks for a CSS-themeable icon (and only on the targeted shape, not as a global default).
 - Set `stroke-linecap="round"` and `stroke-linejoin="round"` for friendly UI icons and organic line art. Use `miter` only for sharp technical/geometric styles, and set `stroke-miterlimit` to avoid spikes at sharp joins.
 - For diagrams that may be scaled non-uniformly, use `vector-effect="non-scaling-stroke"`.
 - `paint-order` defaults to `fill stroke markers`. To outline text without eating into letterforms, set `paint-order="stroke"` on `<text>`.
@@ -106,14 +120,21 @@ For purely decorative SVGs (next to visible text, button icons with labels, ambi
 
 For output that may end up in untrusted hands, recommend the consumer pass it through DOMPurify with `USE_PROFILES: { svg: true, svgFilters: true }`, and parse server-side with external entity resolution disabled (`defusedxml` in Python, `disallow-doctype-decl` feature in Java).
 
-### Animation
+### Animation (SMIL only)
 
-- SMIL is supported in all modern browsers (~96% global). Chrome's planned 2015 deprecation was suspended.
-- Use `<animate>` for scalar attributes, `<animateTransform>` for `transform` (with required `type="rotate|scale|translate|skewX|skewY"`), `<animateMotion>` for path-following motion.
-- Never use `<animate attributeName="transform">`; always use `<animateTransform>` with `type=`.
-- Default `repeatCount` is 1. Use `repeatCount="indefinite"` to loop. `fill="freeze"` keeps the end state instead of reverting.
-- SMIL **does not** automatically honor `prefers-reduced-motion`. For reduced-motion users, prefer CSS animations (which the engine pauses by default) or guard SMIL behind `matchMedia('(prefers-reduced-motion: reduce)')` and call `pauseAnimations()` on the SVG root.
-- For animation in static SVG distributed widely, keep motion subtle, looping, and skippable. Provide a static equivalent when motion isn't essential.
+For CSS-independent SVG, animation is **always** SMIL — declarative animation elements baked into the SVG document. CSS animations require a CSS engine the renderer may not have.
+
+- Use `<animate>` for scalar attributes (`cx`, `r`, `opacity`, `fill`, `stroke-width`, etc.).
+- Use `<animateTransform>` for transform animation. The `type` attribute is required: `translate`, `scale`, `rotate`, `skewX`, `skewY`. **Never use `<animate attributeName="transform">`** — that doesn't work.
+- Use `<animateMotion>` for path-following motion. Provide a `path` attribute or a child `<mpath href="#path-id"/>`. Optional `rotate="auto"` aligns the moved element to the path tangent.
+- Use `<set>` for instantaneous attribute changes at a `begin` time (no interpolation).
+- Required attributes for animations: `attributeName` (case-sensitive, kebab-case e.g. `stroke-width`), one of `from`+`to` / `by` / `values`, and `dur`.
+- Default `repeatCount` is 1. Use `repeatCount="indefinite"` to loop. `fill="freeze"` keeps the end state at animation completion instead of reverting; `fill="remove"` (default) reverts.
+- For multi-step animation, use `values="a;b;c;d"` with optional `keyTimes="0;0.25;0.5;1"` (lengths must match) and `calcMode="linear"` (default), `discrete`, `paced`, or `spline` (with `keySplines`).
+- For complex sequencing, use `begin="otherAnim.end"` and `begin="elementId.click"` to chain animations declaratively.
+- SMIL ignores `prefers-reduced-motion` automatically. For inclusive output, keep motion subtle, brief, looping, and never essential to comprehension. Always provide a static equivalent when motion isn't required by the brief.
+
+Reference and full element list: [W3Schools SVG Animation](https://www.w3schools.com/graphics/svg_animation.asp), [MDN SMIL animation](https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/SVG_animation_with_SMIL).
 
 ### Performance
 
@@ -160,6 +181,8 @@ For SVG repair, return the corrected complete SVG. For sets (icon families, mult
 
 ## Gotchas (high-impact, easy to miss)
 
+- **`<style>` and `style="..."` break portability.** A renderer without a CSS engine ignores them. Use presentation attributes.
+- **`currentColor` defaults to black** in non-CSS renderers. Use explicit colors unless the user asks for CSS theming.
 - `viewBox` is camelCase. `viewbox` silently fails in strict XML parsing.
 - `fill` default is black. Forgetting `fill="none"` on a stroked outline produces a solid black blob.
 - `mask-type` default is `luminance`. White-on-black masks reveal; alpha-style masks need `mask-type="alpha"`.
@@ -168,5 +191,4 @@ For SVG repair, return the corrected complete SVG. For sets (icon families, mult
 - `S`/`T` after a non-matching curve degenerate. Always pair `C`→`S` and `Q`→`T`.
 - Both `href` and `xlink:href` must be sanitized; the deprecated form still resolves.
 - `<animate attributeName="transform">` does not work; use `<animateTransform type="...">`.
-- SMIL ignores `prefers-reduced-motion` unless guarded manually.
 - `data:image/svg+xml` URLs are equivalent to inline SVG and unsafe in `<image href>`.

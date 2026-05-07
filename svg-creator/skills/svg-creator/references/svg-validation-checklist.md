@@ -14,6 +14,21 @@ Use this when reviewing SVG output manually or when `scripts/validate_svg.py` ca
 - No `<!DOCTYPE>`, no `<!ENTITY>`, no `<?xml-stylesheet?>` processing instruction.
 - No deprecated `version` or `baseProfile` attributes.
 
+## CSS independence (default mode)
+
+For SVGs intended to render in any compliant renderer (Inkscape, librsvg, CairoSVG, native mobile, design tools), confirm:
+
+- No `<style>` element anywhere in the document.
+- No `style="..."` attribute on any element.
+- No `class="..."` attribute (CSS hook with no effect without a CSS engine).
+- No `currentColor` value in `fill`, `stroke`, `flood-color`, `stop-color`, etc.
+- No CSS variables (`var(...)`).
+- No `@keyframes`, `@import`, `@media`, `@font-face`.
+- Animation uses SMIL elements (`<animate>`, `<animateTransform>`, `<animateMotion>`, `<set>`), not CSS.
+- All visual properties expressed as presentation attributes.
+
+Skip these checks only when the user explicitly opted in to CSS-themed output (a web-only icon system, etc.).
+
 ## Accessibility
 
 For meaningful SVGs (illustrations, charts, diagrams, meaningful logos):
@@ -88,7 +103,7 @@ For decorative SVGs (icons next to visible labels, ambient marks):
 
 - A bare `<path>` without `fill="none"` will render solid black; verify intent.
 - Stroke-only outlines have `fill="none"` plus a stroke color.
-- `currentColor` is used on monochrome icons unless a fixed palette is required.
+- Colors are explicit hex values (e.g. `fill="#3b82f6"`), not `currentColor`, unless the user opted into CSS theming.
 - Paint-order is the default (`fill stroke markers`) unless `paint-order="stroke"` is intentional (typically for outlined text).
 
 ## Path data
