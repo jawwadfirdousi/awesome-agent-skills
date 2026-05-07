@@ -88,8 +88,9 @@ Color: warm red or pink.
 | --- | --- |
 | `scripts/validate_svg.py` | Strict SVG validator — XML well-formedness, ID resolution, path-data sanity, viewBox, safety checks |
 | `references/svg-quality-standard.md` | Aesthetic and structural quality bar (used for detailed illustrations, logos, diagrams) |
-| `references/svg-templates.md` | Starter templates by SVG type |
-| `references/svg-path-guide.md` | Reference for writing/repairing path `d` data |
+| `references/svg-templates.md` | Starter templates by SVG type — including sprite + `<use>`, CSS animation with `prefers-reduced-motion`, `animateTransform`, `animateMotion` |
+| `references/svg-path-guide.md` | Path data BNF, smooth-curve reflection rules, implicit lineto, arc parsing |
+| `references/svg-security.md` | W3C / OWASP / DOMPurify-grounded security deny list (XSS surfaces, XXE, SMIL hijack) |
 | `references/svg-validation-checklist.md` | Manual checklist when the validator script can't run |
 | `agents/openai.yaml` | Codex agent metadata (display name, default prompt, etc.) |
 

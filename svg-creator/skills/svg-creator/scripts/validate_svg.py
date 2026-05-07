@@ -122,6 +122,25 @@ FORBIDDEN_TAGS = {
     "canvas",
 }
 
+ANIMATION_TAGS = {
+    "animate",
+    "animateTransform",
+    "animateMotion",
+    "set",
+}
+
+SMIL_HREF_ATTR_NAMES = {"href", "xlink:href"}
+
+DANGEROUS_URL_SCHEMES = (
+    "javascript:",
+    "vbscript:",
+    "livescript:",
+    "mocha:",
+    "data:image/svg+xml",
+    "data:text/html",
+    "data:application/xhtml+xml",
+)
+
 NON_NEGATIVE_LENGTH_ATTRS = {
     "width",
     "height",
@@ -313,11 +332,25 @@ def validate_path_data(d: str) -> list[str]:
 
     index = 0
     current_command: str | None = None
+    previous_letter: str | None = None
     seen_move = False
 
     while index < len(tokens):
         token = tokens[index]
         if token in "MmZzLlHhVvCcSsQqTtAa":
+            # Smooth-curve reflection rule: S/s must follow C/c/S/s and
+            # T/t must follow Q/q/T/t. Otherwise the inferred control
+            # point coincides with the current point and the curve
+            # collapses into a degenerate shape.
+            if token in "Ss" and previous_letter not in {"C", "c", "S", "s"}:
+                issues.append(
+                    f"smooth curve {token} must follow C/c/S/s; otherwise the first control point collapses to the current point"
+                )
+            if token in "Tt" and previous_letter not in {"Q", "q", "T", "t"}:
+                issues.append(
+                    f"smooth curve {token} must follow Q/q/T/t; otherwise the control point collapses to the current point"
+                )
+            previous_letter = token
             current_command = token
             index += 1
         elif current_command is None:
@@ -433,6 +466,19 @@ def scan_css_for_danger(value: str) -> list[str]:
     lower = value.lower()
     if "javascript:" in lower:
         issues.append("css contains javascript URL")
+    if "expression(" in lower:
+        issues.append("css contains IE expression() — runs JavaScript")
+    if "behavior:" in lower:
+        issues.append("css contains IE behavior: binding")
+    if "-moz-binding:" in lower:
+        issues.append("css contains -moz-binding")
+    if "@font-face" in lower and "url(" in lower:
+        # Allow @font-face only with data: URLs; otherwise it fetches external fonts.
+        for match in ANY_URL_RE.finditer(value):
+            target = match.group(1).strip("'\"").lower()
+            if not target.startswith("data:") and not target.startswith("#"):
+                issues.append(f"css @font-face references external font '{target}'")
+                break
     for match in ANY_URL_RE.finditer(value):
         target = match.group(1).strip("'\"")
         if looks_external_url(target):
@@ -586,6 +632,27 @@ def validate_svg(path: Path, strict: bool = False) -> Report:
         if tag == "style" and elem.text:
             for issue in scan_css_for_danger(elem.text):
                 report.error(f"{location}: {issue}")
+
+        if tag in ANIMATION_TAGS:
+            target_attr = normalized_attrs.get("attributeName", "")
+            if target_attr in SMIL_HREF_ATTR_NAMES:
+                # Animation that mutates href is a known XSS vector — values
+                # like "javascript:alert(1)" run on activation. Verify every
+                # supplied target value.
+                animation_values: list[str] = []
+                for src in ("to", "from", "by"):
+                    if src in normalized_attrs:
+                        animation_values.append(normalized_attrs[src])
+                if "values" in normalized_attrs:
+                    animation_values.extend(
+                        v.strip() for v in normalized_attrs["values"].split(";")
+                    )
+                for candidate in animation_values:
+                    lower = candidate.strip().lower()
+                    if any(lower.startswith(scheme) for scheme in DANGEROUS_URL_SCHEMES):
+                        report.error(
+                            f"{location}: SMIL animation targets {target_attr} with dangerous URL '{candidate}'"
+                        )
 
         if tag == "path":
             d = normalized_attrs.get("d")
