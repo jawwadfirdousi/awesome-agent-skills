@@ -42,6 +42,18 @@
         "graphics",
         "design"
       ]
+    },
+    {
+      "name": "supabase",
+      "source": "./supabase",
+      "description": "Run Supabase Management API SQL and operational database tasks.",
+      "category": "database",
+      "tags": [
+        "supabase",
+        "sql",
+        "database",
+        "management-api"
+      ]
     }
   ]
 }
