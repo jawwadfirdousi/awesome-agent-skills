@@ -4,7 +4,7 @@ description: "Persistent project memory stored as JSON, scoped by project and ta
 compatibility: Requires bash and jq.
 metadata:
   author: jawwadfirdousi
-  version: "2.1"
+  version: "2.2"
 ---
 
 # Better Memory
@@ -100,7 +100,9 @@ Read commands (`recall`, `list`, `search`) and `add` default the project to the
 
 ## Data model
 
-Memories live in `memories.json` at the skill root (gitignored, `chmod 600`):
+Memories live in a single file at `~/.agents/better-memories/memories.json`
+(`chmod 600`), created on first write. It is one store shared across all repos,
+partitioned by each memory's `project`. A memory looks like:
 
 ```json
 { "id": "1a2b3c4d", "project": "acme-api", "tags": ["decision", "database"],
@@ -181,11 +183,10 @@ avoid near-duplicates.
 - `search` matches memory text literally, so it misses synonyms and paraphrases.
   For concept-based recall, use `recall` (and tags), not `search`.
 - `recall` shows truncated snippets; `list`/`get` show full content.
-- `memories.json` is read from the skill root, or `~/.config/claude/memories.json`
-  if that file already exists.
+- The store is `~/.agents/better-memories/memories.json` (created on first write);
+  a store in the skill's own directory is still read if one exists there.
 - `update` can change content and tags, but never a memory's project; a memory
   must always keep at least one tag.
 - A skill loads only when invoked, so this store is not auto-injected every
   session — run `recall` to bring memories into context.
-```
 
