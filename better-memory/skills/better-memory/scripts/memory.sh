@@ -3,8 +3,11 @@
 set -euo pipefail
 
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONFIG_PRIMARY="${SKILL_DIR}/memories.json"
-CONFIG_FALLBACK="${HOME}/.config/claude/memories.json"
+# Canonical store: a single home-dir file, shared across repos and partitioned by
+# each memory's "project" field. Created on first write.
+CONFIG_PRIMARY="${HOME}/.agents/better-memories/memories.json"
+# Fallback: a store kept in the skill's own directory, used if it already exists.
+CONFIG_FALLBACK="${SKILL_DIR}/memories.json"
 
 require_jq() {
     if ! command -v jq >/dev/null 2>&1; then
@@ -13,7 +16,8 @@ require_jq() {
     fi
 }
 
-# Active store path: first existing, else the primary (skill-local) path.
+# Active store path: the canonical store if present, else a skill-local store if
+# one exists, else the canonical path (so the first write creates it there).
 config_path() {
     if [[ -f "$CONFIG_PRIMARY" ]]; then
         echo "$CONFIG_PRIMARY"
@@ -467,7 +471,7 @@ cmd_update() {
         fi
         id="$ids"
     else
-        echo "Error: target a memory with --id, or with --tag (optionally --project)." >&2
+        echo "Error: target a memory with --id, or with --tag (optionally --project or --all)." >&2
         exit 1
     fi
 
@@ -581,8 +585,9 @@ Scope:
   project. 'delete' never auto-detects: pass --project or --id explicitly.
 
 Storage:
-  JSON in memories.json at the skill root (gitignored, chmod 600). Each memory has
-  project, tags[], content, timestamps, and a short id shown by recall/list.
+  JSON at ~/.agents/better-memories/memories.json (chmod 600), one store shared
+  across repos. Each memory has project, tags[], content, timestamps, and a short
+  id shown by recall/list.
 
 Examples:
   memory.sh recall

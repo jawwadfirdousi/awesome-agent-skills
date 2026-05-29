@@ -15,8 +15,9 @@ It is built to be used like memory: **recall** what's known at the start of work
 ## Setup
 
 Nothing to configure. The store is created on first write at
-`skills/better-memory/memories.json` (gitignored, `chmod 600`). A copyable
-template lives at `skills/better-memory/memories.example.json`.
+`~/.agents/better-memories/memories.json` (`chmod 600`), a single file shared
+across all your repos. A copyable template lives at
+`skills/better-memory/memories.example.json`.
 
 ```bash
 cd skills/better-memory
@@ -41,8 +42,8 @@ Each memory holds:
 }
 ```
 
-`memories.json` is read from the skill root, or from
-`~/.config/claude/memories.json` if that file already exists.
+The store lives at `~/.agents/better-memories/memories.json` (created on first
+write). A store in the skill's own directory is still read if one exists.
 
 ## Use It Like Memory
 
@@ -143,7 +144,6 @@ Use the better-memory skill to recall anything tagged letter.
   existing tags.
 - `recall` shows truncated snippets (the index); `list`/`get` show full content.
 - `search` is literal; for concept/synonym recall use `recall` and tags.
-- `memories.json` is gitignored and `chmod 600`, since memories can hold personal
-  context. Keep secrets out of it.
-```
+- The store (`~/.agents/better-memories/memories.json`) is `chmod 600`, since
+  memories can hold personal context. Keep secrets out of it.
 
