@@ -1,7 +1,7 @@
 {
   "name": "better-memory",
   "description": "Store and recall project memories as JSON, organized by project and tags.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "jawwadfirdousi"
   },
