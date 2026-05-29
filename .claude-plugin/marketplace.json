@@ -54,6 +54,19 @@
         "database",
         "management-api"
       ]
+    },
+    {
+      "name": "better-memory",
+      "source": "./better-memory",
+      "description": "Store and recall project memories as JSON, organized by project and tags.",
+      "category": "productivity",
+      "tags": [
+        "memory",
+        "notes",
+        "tags",
+        "knowledge",
+        "context"
+      ]
     }
   ]
 }
