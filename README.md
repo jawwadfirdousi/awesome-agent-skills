@@ -10,6 +10,7 @@ Portable agent skills for Claude Code, OpenAI Codex, and Claude.ai. Built on the
 | [`commit-message`](commit-message) | Drafts a Conventional Commits message from staged changes |
 | [`svg-creator`](svg-creator/skills/svg-creator) | Creates, edits, and validates SVGs: icons, logos, illustrations, diagrams |
 | [`supabase`](supabase) | Runs SQL against Supabase via the management API: queries, schema changes, RLS, migrations |
+| [`better-memory`](better-memory) | Stores and recalls project memories as JSON, organized by project and tags |
 
 Click a skill name for usage details and examples.
 
@@ -23,6 +24,7 @@ Click a skill name for usage details and examples.
 /plugin install commit-message@awesome-agent-skills
 /plugin install svg-creator@awesome-agent-skills
 /plugin install supabase@awesome-agent-skills
+/plugin install better-memory@awesome-agent-skills
 ```
 
 ### Codex
@@ -32,6 +34,7 @@ $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/
 $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/commit-message/skills/commit-message
 $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/svg-creator/skills/svg-creator
 $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/supabase/skills/supabase
+$skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/better-memory/skills/better-memory
 ```
 
 Restart Codex after install.
@@ -45,7 +48,7 @@ git clone https://github.com/jawwadfirdousi/awesome-agent-skills.git
 cd awesome-agent-skills/repo-snapshot/skills && zip -r repo-snapshot.zip repo-snapshot
 ```
 
-Upload at [claude.ai/customize/skills](https://claude.ai/customize/skills) (`+` → `+ Create skill` → `Upload a skill`). Repeat with `commit-message/skills/commit-message`, `svg-creator/skills/svg-creator`, and `supabase/skills/supabase`.
+Upload at [claude.ai/customize/skills](https://claude.ai/customize/skills) (`+` → `+ Create skill` → `Upload a skill`). Repeat with `commit-message/skills/commit-message`, `svg-creator/skills/svg-creator`, `supabase/skills/supabase`, and `better-memory/skills/better-memory`.
 
 ## Uninstall
 
@@ -56,6 +59,7 @@ Upload at [claude.ai/customize/skills](https://claude.ai/customize/skills) (`+` 
 /plugin uninstall commit-message@awesome-agent-skills
 /plugin uninstall svg-creator@awesome-agent-skills
 /plugin uninstall supabase@awesome-agent-skills
+/plugin uninstall better-memory@awesome-agent-skills
 /plugin marketplace remove awesome-agent-skills        # removes ALL skills from this marketplace
 ```
 
@@ -68,6 +72,7 @@ rm -rf ~/.codex/skills/repo-snapshot
 rm -rf ~/.codex/skills/commit-message
 rm -rf ~/.codex/skills/svg-creator
 rm -rf ~/.codex/skills/supabase
+rm -rf ~/.codex/skills/better-memory
 ```
 
 Restart Codex. To disable without deleting, add to `~/.codex/config.toml`:

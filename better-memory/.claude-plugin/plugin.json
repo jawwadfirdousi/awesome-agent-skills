@@ -1,0 +1,19 @@
+{
+  "name": "better-memory",
+  "description": "Store and recall project memories as JSON, organized by project and tags.",
+  "version": "0.1.0",
+  "author": {
+    "name": "jawwadfirdousi"
+  },
+  "homepage": "https://github.com/jawwadfirdousi/awesome-agent-skills",
+  "repository": "https://github.com/jawwadfirdousi/awesome-agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "memory",
+    "notes",
+    "tags",
+    "knowledge",
+    "context",
+    "json"
+  ]
+}
