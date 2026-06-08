@@ -1,0 +1,19 @@
+{
+  "name": "x-twitter-scraper",
+  "description": "Use Xquik for X data, searches, media, monitoring, webhooks, MCP, and confirmation-gated actions.",
+  "version": "2.4.16",
+  "author": {
+    "name": "Xquik"
+  },
+  "homepage": "https://docs.xquik.com",
+  "repository": "https://github.com/Xquik-dev/x-twitter-scraper",
+  "license": "MIT",
+  "keywords": [
+    "x",
+    "twitter",
+    "social-media",
+    "mcp",
+    "webhooks",
+    "data-extraction"
+  ]
+}
