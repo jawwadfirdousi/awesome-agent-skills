@@ -67,6 +67,20 @@
         "knowledge",
         "context"
       ]
+    },
+    {
+      "name": "x-twitter-scraper",
+      "source": "./x-twitter-scraper",
+      "description": "Use Xquik for X data, searches, media, monitoring, webhooks, MCP, and confirmation-gated actions.",
+      "category": "social-media",
+      "tags": [
+        "x",
+        "twitter",
+        "social-media",
+        "mcp",
+        "webhooks",
+        "data-extraction"
+      ]
     }
   ]
 }

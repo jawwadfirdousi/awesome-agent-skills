@@ -11,6 +11,7 @@ Portable agent skills for Claude Code, OpenAI Codex, and Claude.ai. Built on the
 | [`svg-creator`](svg-creator/skills/svg-creator) | Creates, edits, and validates SVGs: icons, logos, illustrations, diagrams |
 | [`supabase`](supabase) | Runs SQL against Supabase via the management API: queries, schema changes, RLS, migrations |
 | [`better-memory`](better-memory) | Stores and recalls project memories as JSON, organized by project and tags |
+| [`x-twitter-scraper`](x-twitter-scraper) | Uses Xquik for X data, searches, media, monitoring, webhooks, MCP, and confirmation-gated actions |
 
 Click a skill name for usage details and examples.
 
@@ -25,6 +26,7 @@ Click a skill name for usage details and examples.
 /plugin install svg-creator@awesome-agent-skills
 /plugin install supabase@awesome-agent-skills
 /plugin install better-memory@awesome-agent-skills
+/plugin install x-twitter-scraper@awesome-agent-skills
 ```
 
 ### Codex
@@ -35,20 +37,21 @@ $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/
 $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/svg-creator/skills/svg-creator
 $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/supabase/skills/supabase
 $skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/better-memory/skills/better-memory
+$skill-installer install https://github.com/jawwadfirdousi/awesome-agent-skills/tree/main/x-twitter-scraper/skills/x-twitter-scraper
 ```
 
 Restart Codex after install.
 
 ### Claude.ai (consumer)
 
-ZIP upload only — no GitHub URL install.
+ZIP upload only - no GitHub URL install.
 
 ```bash
 git clone https://github.com/jawwadfirdousi/awesome-agent-skills.git
 cd awesome-agent-skills/repo-snapshot/skills && zip -r repo-snapshot.zip repo-snapshot
 ```
 
-Upload at [claude.ai/customize/skills](https://claude.ai/customize/skills) (`+` → `+ Create skill` → `Upload a skill`). Repeat with `commit-message/skills/commit-message`, `svg-creator/skills/svg-creator`, `supabase/skills/supabase`, and `better-memory/skills/better-memory`.
+Upload at [claude.ai/customize/skills](https://claude.ai/customize/skills) (`+` → `+ Create skill` → `Upload a skill`). Repeat with `commit-message/skills/commit-message`, `svg-creator/skills/svg-creator`, `supabase/skills/supabase`, `better-memory/skills/better-memory`, and `x-twitter-scraper/skills/x-twitter-scraper`.
 
 ## Uninstall
 
@@ -60,6 +63,7 @@ Upload at [claude.ai/customize/skills](https://claude.ai/customize/skills) (`+` 
 /plugin uninstall svg-creator@awesome-agent-skills
 /plugin uninstall supabase@awesome-agent-skills
 /plugin uninstall better-memory@awesome-agent-skills
+/plugin uninstall x-twitter-scraper@awesome-agent-skills
 /plugin marketplace remove awesome-agent-skills        # removes ALL skills from this marketplace
 ```
 
@@ -73,6 +77,7 @@ rm -rf ~/.codex/skills/commit-message
 rm -rf ~/.codex/skills/svg-creator
 rm -rf ~/.codex/skills/supabase
 rm -rf ~/.codex/skills/better-memory
+rm -rf ~/.codex/skills/x-twitter-scraper
 ```
 
 Restart Codex. To disable without deleting, add to `~/.codex/config.toml`:
@@ -89,4 +94,4 @@ enabled = false
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT - see [LICENSE](LICENSE).
